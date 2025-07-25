@@ -1,0 +1,22 @@
+# File Eksekusi
+api-coffee-app
+*.exe
+
+# Dependensi
+vendor/
+
+# File Konfigurasi
+.env
+config.yaml
+*.ini
+
+# File Database
+*.db
+*.sqlite
+
+# File Log
+*.log
+
+# File IDE
+.idea/
+.vscode/
