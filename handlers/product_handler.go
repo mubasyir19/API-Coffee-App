@@ -53,10 +53,12 @@ func (h *productHandler) GetProdutcByID(c *gin.Context) {
 		return
 	}
 
+	response := responses.ProductReponseFromModel(product)
+
 	c.JSON(http.StatusOK, responses.APIResponse{
 		Code:    "SUCCESS",
 		Message: "Successfully find all products",
-		Data:    product,
+		Data:    response,
 	})
 }
 

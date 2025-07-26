@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"api-coffee-app/models"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -37,7 +38,7 @@ func (r *productRepository) FindByID(id string) (*models.Product, error) {
 
 func (r *productRepository) FindByName(name string) (*models.Product, error) {
 	var product models.Product
-	err := r.db.Where("name = ?", name).First(&product).Error
+	err := r.db.Where("LOWER(name) = ?", strings.ToLower(name)).First(&product).Error
 	return &product, err
 }
 
