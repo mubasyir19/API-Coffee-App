@@ -60,18 +60,24 @@ func ProductReponseFromModel(product *models.Product) ProductResponse {
 }
 
 type CategoryResponse struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	ID        string            `json:"id"`
+	Name      string            `json:"name"`
+	CreatedAt string            `json:"created_at"`
+	UpdatedAt string            `json:"updated_at"`
+	Products  []ProductResponse `json:"products"`
 }
 
-func CategoryReponseFromModel(product *models.Category) CategoryResponse {
-	return CategoryResponse{
-		ID:        product.ID,
-		Name:      product.Name,
-		CreatedAt: product.CreatedAt.Local().String(),
-		UpdatedAt: product.UpdatedAt.Local().String(),
+func CategoryReponseFromModel(category *models.Category) CategoryResponse {
+	var productResponses []ProductResponse
+	for _, p := range category.Products {
+		productResponses = append(productResponses, ProductReponseFromModel(&p))
 	}
 
+	return CategoryResponse{
+		ID:        category.ID,
+		Name:      category.Name,
+		CreatedAt: category.CreatedAt.Local().String(),
+		UpdatedAt: category.UpdatedAt.Local().String(),
+		Products:  productResponses,
+	}
 }

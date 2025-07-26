@@ -22,7 +22,7 @@ func NewCategoryRepository(db *gorm.DB) CategoryRepository {
 
 func (r *categoryRepository) FindAll() ([]models.Category, error) {
 	var categories []models.Category
-	err := r.db.Find(&categories).Error
+	err := r.db.Preload("Products").Find(&categories).Error
 	return categories, err
 }
 
