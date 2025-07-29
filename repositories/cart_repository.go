@@ -8,7 +8,7 @@ import (
 )
 
 type CartRepository interface {
-	FindByUserID(id string) (*models.Cart, error)
+	FindByUserID(customerID string) ([]models.Cart, error)
 	FindByUserAndProduct(CustomerID, ProductID string) (*models.Cart, error)
 	Create(cart *models.Cart) (*models.Cart, error)
 	Update(cart *models.Cart) (*models.Cart, error)
@@ -23,10 +23,10 @@ func NewCartRepository(db *gorm.DB) CartRepository {
 	return &cartRepository{db}
 }
 
-func (r *cartRepository) FindByUserID(id string) (*models.Cart, error) {
-	var cart models.Cart
-	err := r.db.Where("id = ?", id).First(&cart).Error
-	return &cart, err
+func (r *cartRepository) FindByUserID(customerID string) ([]models.Cart, error) {
+	var cart []models.Cart
+	err := r.db.Preload("Customer").Preload("Product").Where("customer_id = ?", customerID).Find(&cart).Error
+	return cart, err
 }
 
 func (r *cartRepository) FindByUserAndProduct(CustomerID, ProductID string) (*models.Cart, error) {

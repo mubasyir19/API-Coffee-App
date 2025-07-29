@@ -81,3 +81,22 @@ func CategoryReponseFromModel(category *models.Category) CategoryResponse {
 		Products:  productResponses,
 	}
 }
+
+type CartSummaryResponse struct {
+	TotalPrice float64               `json:"total_price"`
+	TotalItems int                   `json:"total_items"`
+	Customer   CustomerResponse      `json:"customer"`
+	Products   []ProductCartResponse `json:"products"`
+}
+
+type ProductCartResponse struct {
+	ID           string  `json:"id"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	ImageProduct string  `json:"image_product"`
+	Quantity     int     `json:"quantity"`
+	TotalPrice   float64 `json:"total_price"`
+	CreatedAt    string  `json:"created_at"`
+	UpdatedAt    string  `json:"updated_at"`
+}

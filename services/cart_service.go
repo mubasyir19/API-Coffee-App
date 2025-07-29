@@ -12,6 +12,7 @@ import (
 )
 
 type CartService interface {
+	GetItems(customerID string) ([]models.Cart, error)
 	AddItem(cartInput *requests.CartInput) (*models.Cart, error)
 	UpdateItem(cartInput *requests.CartInput) (*models.Cart, error)
 	RemoveItem(id string) error
@@ -25,6 +26,20 @@ type cartService struct {
 
 func NewCartService(repository repositories.CartRepository, productRepo repositories.ProductRepository, customerRepo repositories.CustomerRepository) CartService {
 	return &cartService{repository, productRepo, customerRepo}
+}
+
+func (s *cartService) GetItems(customerID string) ([]models.Cart, error) {
+	if customerID == "" {
+		return nil, errors.New("customer id required")
+	}
+
+	carts, err := s.repository.FindByUserID(customerID)
+
+	if err != nil {
+		return nil, errors.New("failed to get data cart")
+	}
+
+	return carts, nil
 }
 
 func (s *cartService) AddItem(cartInput *requests.CartInput) (*models.Cart, error) {

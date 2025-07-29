@@ -67,6 +67,7 @@ func main() {
 	api.GET("/product/category/:category_id", productHandler.GetProductsByCategory)
 	api.POST("/product/add", productHandler.AddProduct)
 
+	api.GET("/cart", cartHandler.GetCartItems)
 	api.POST("/cart/add", cartHandler.AddItemToCart)
 	api.PUT("/cart/update", cartHandler.UpdateItemCart)
 

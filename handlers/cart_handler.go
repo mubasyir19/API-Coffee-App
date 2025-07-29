@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"api-coffee-app/requests"
+	"api-coffee-app/responses"
 	"api-coffee-app/services"
 	"log"
 	"net/http"
@@ -15,6 +16,86 @@ type cartHandler struct {
 
 func NewCartHandler(service *services.CartService) *cartHandler {
 	return &cartHandler{service: *service}
+}
+
+func (h *cartHandler) GetCartItems(c *gin.Context) {
+	customerID := c.Query("customerId")
+	if customerID == "" {
+		c.JSON(http.StatusBadRequest, responses.APIResponse{
+			Code:    "BAD_REQUEST",
+			Message: "User ID is required",
+			Data:    nil,
+		})
+		return
+	}
+
+	cartItems, err := h.service.GetItems(customerID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, responses.APIResponse{
+			Code:    "ERROR",
+			Message: "Failed to fetch cart items",
+			Data:    nil,
+		})
+		return
+	}
+
+	if len(cartItems) == 0 {
+		c.JSON(http.StatusOK, responses.APIResponse{
+			Code:    "SUCCESS",
+			Message: "Cart is empty",
+			Data:    nil,
+		})
+		return
+	}
+
+	var products []responses.ProductCartResponse
+	var customerResp responses.CustomerResponse
+	var totalPrice float64
+	var totalItems int
+
+	for _, item := range cartItems {
+		product := item.Product
+		customer := item.Customer
+
+		productResp := responses.ProductCartResponse{
+			ID:           product.ID,
+			Name:         product.Name,
+			Description:  product.Description,
+			Price:        product.Price,
+			ImageProduct: product.Image,
+			Quantity:     item.Quantity,
+			TotalPrice:   item.TotalPrice,
+			CreatedAt:    product.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:    product.UpdatedAt.Format("2006-01-02 15:04:05"),
+		}
+		products = append(products, productResp)
+		totalPrice += item.TotalPrice
+		totalItems = len(products)
+
+		if customerResp.ID == "" {
+			customerResp = responses.CustomerResponse{
+				ID:          customer.ID,
+				Fullname:    customer.Fullname,
+				Username:    customer.Username,
+				Email:       customer.Email,
+				PhoneNumber: customer.PhoneNumber,
+				Address:     customer.Address,
+				CreatedAt:   customer.CreatedAt.Format("2006-01-02 15:04:05"),
+				UpdatedAt:   customer.UpdatedAt.Format("2006-01-02 15:04:05"),
+			}
+		}
+	}
+
+	c.JSON(http.StatusOK, responses.APIResponse{
+		Code:    "SUCCESS",
+		Message: "Successfully get data cart",
+		Data: responses.CartSummaryResponse{
+			TotalPrice: totalPrice,
+			TotalItems: totalItems,
+			Customer:   customerResp,
+			Products:   products,
+		},
+	})
 }
 
 func (h *cartHandler) AddItemToCart(c *gin.Context) {
