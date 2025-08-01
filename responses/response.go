@@ -13,11 +13,8 @@ type CustomerResponse struct {
 	Fullname    string `json:"fullname"`
 	Username    string `json:"username"`
 	Email       string `json:"email"`
-	Password    string `json:"password"`
 	PhoneNumber string `json:"phoneNumber"`
 	Address     string `json:"address"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
 }
 
 func CustomerReponseFromModel(customer *models.Customer) CustomerResponse {
@@ -28,8 +25,6 @@ func CustomerReponseFromModel(customer *models.Customer) CustomerResponse {
 		Email:       customer.Email,
 		PhoneNumber: customer.PhoneNumber,
 		Address:     customer.Address,
-		CreatedAt:   customer.CreatedAt.Local().String(),
-		UpdatedAt:   customer.UpdatedAt.Local().String(),
 	}
 
 }
@@ -83,10 +78,10 @@ func CategoryReponseFromModel(category *models.Category) CategoryResponse {
 }
 
 type CartSummaryResponse struct {
-	TotalPrice float64               `json:"total_price"`
-	TotalItems int                   `json:"total_items"`
-	Customer   CustomerResponse      `json:"customer"`
-	Products   []ProductCartResponse `json:"products"`
+	TotalAmount float64               `json:"total_amount"`
+	TotalItems  int                   `json:"total_items"`
+	Customer    CustomerResponse      `json:"customer"`
+	Products    []ProductCartResponse `json:"products"`
 }
 
 type ProductCartResponse struct {
@@ -97,6 +92,4 @@ type ProductCartResponse struct {
 	ImageProduct string  `json:"image_product"`
 	Quantity     int     `json:"quantity"`
 	TotalPrice   float64 `json:"total_price"`
-	CreatedAt    string  `json:"created_at"`
-	UpdatedAt    string  `json:"updated_at"`
 }

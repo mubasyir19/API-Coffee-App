@@ -50,7 +50,7 @@ func (h *cartHandler) GetCartItems(c *gin.Context) {
 
 	var products []responses.ProductCartResponse
 	var customerResp responses.CustomerResponse
-	var totalPrice float64
+	var totalAmount float64
 	var totalItems int
 
 	for _, item := range cartItems {
@@ -65,11 +65,10 @@ func (h *cartHandler) GetCartItems(c *gin.Context) {
 			ImageProduct: product.Image,
 			Quantity:     item.Quantity,
 			TotalPrice:   item.TotalPrice,
-			CreatedAt:    product.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:    product.UpdatedAt.Format("2006-01-02 15:04:05"),
 		}
+
 		products = append(products, productResp)
-		totalPrice += item.TotalPrice
+		totalAmount += item.TotalPrice
 		totalItems = len(products)
 
 		if customerResp.ID == "" {
@@ -80,8 +79,6 @@ func (h *cartHandler) GetCartItems(c *gin.Context) {
 				Email:       customer.Email,
 				PhoneNumber: customer.PhoneNumber,
 				Address:     customer.Address,
-				CreatedAt:   customer.CreatedAt.Format("2006-01-02 15:04:05"),
-				UpdatedAt:   customer.UpdatedAt.Format("2006-01-02 15:04:05"),
 			}
 		}
 	}
@@ -90,10 +87,10 @@ func (h *cartHandler) GetCartItems(c *gin.Context) {
 		Code:    "SUCCESS",
 		Message: "Successfully get data cart",
 		Data: responses.CartSummaryResponse{
-			TotalPrice: totalPrice,
-			TotalItems: totalItems,
-			Customer:   customerResp,
-			Products:   products,
+			TotalAmount: totalAmount,
+			TotalItems:  totalItems,
+			Customer:    customerResp,
+			Products:    products,
 		},
 	})
 }
