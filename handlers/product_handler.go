@@ -75,10 +75,12 @@ func (h *productHandler) GetProductBySlug(c *gin.Context) {
 		return
 	}
 
+	response := responses.ProductReponseFromModel(product)
+
 	c.JSON(http.StatusOK, responses.APIResponse{
 		Code:    "SUCCESS",
 		Message: "Successfully find product",
-		Data:    product,
+		Data:    response,
 	})
 }
 
