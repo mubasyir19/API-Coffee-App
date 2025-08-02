@@ -2,6 +2,7 @@ package seeders
 
 import (
 	"api-coffee-app/db"
+	"api-coffee-app/helpers"
 	"api-coffee-app/models"
 	"log"
 )
@@ -60,8 +61,9 @@ func ProductSeed() {
 		},
 	}
 
-	for _, product := range products {
-		result := db.DB.Create(&product)
+	for i := range products {
+		products[i].Slug = helpers.GenerateSlug(products[i].Name)
+		result := db.DB.Create(&products[i])
 		if result.Error != nil {
 			log.Println("Failed insert product", result.Error)
 		}

@@ -32,34 +32,30 @@ func CustomerReponseFromModel(customer *models.Customer) CustomerResponse {
 type ProductResponse struct {
 	ID          string  `json:"id"`
 	Name        string  `json:"name"`
+	Slug        string  `json:"slug"`
 	CategoryID  string  `json:"category_id"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	Image       string  `json:"image_product"`
-	CreatedAt   string  `json:"created_at"`
-	UpdatedAt   string  `json:"updated_at"`
 }
 
 func ProductReponseFromModel(product *models.Product) ProductResponse {
 	return ProductResponse{
 		ID:          product.ID,
 		Name:        product.Name,
+		Slug:        product.Slug,
 		CategoryID:  product.CategoryID,
 		Description: product.Description,
 		Price:       product.Price,
 		Image:       product.Image,
-		CreatedAt:   product.CreatedAt.Local().String(),
-		UpdatedAt:   product.UpdatedAt.Local().String(),
 	}
 
 }
 
 type CategoryResponse struct {
-	ID        string            `json:"id"`
-	Name      string            `json:"name"`
-	CreatedAt string            `json:"created_at"`
-	UpdatedAt string            `json:"updated_at"`
-	Products  []ProductResponse `json:"products"`
+	ID       string            `json:"id"`
+	Name     string            `json:"name"`
+	Products []ProductResponse `json:"products"`
 }
 
 func CategoryReponseFromModel(category *models.Category) CategoryResponse {
@@ -69,11 +65,9 @@ func CategoryReponseFromModel(category *models.Category) CategoryResponse {
 	}
 
 	return CategoryResponse{
-		ID:        category.ID,
-		Name:      category.Name,
-		CreatedAt: category.CreatedAt.Local().String(),
-		UpdatedAt: category.UpdatedAt.Local().String(),
-		Products:  productResponses,
+		ID:       category.ID,
+		Name:     category.Name,
+		Products: productResponses,
 	}
 }
 
@@ -87,6 +81,7 @@ type CartSummaryResponse struct {
 type ProductCartResponse struct {
 	ID           string  `json:"id"`
 	Name         string  `json:"name"`
+	Slug         string  `json:"slug"`
 	Description  string  `json:"description"`
 	Price        float64 `json:"price"`
 	ImageProduct string  `json:"image_product"`

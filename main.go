@@ -5,6 +5,7 @@ import (
 	"api-coffee-app/handlers"
 	"api-coffee-app/middleware"
 	"api-coffee-app/repositories"
+	"api-coffee-app/seeders"
 	"api-coffee-app/services"
 	"net/http"
 
@@ -31,8 +32,8 @@ func main() {
 	db.ConnectDB()
 	database := db.DB
 
-	// seeders.CategorySeeds()
-	// seeders.ProductSeed()
+	seeders.CategorySeeds()
+	seeders.ProductSeed()
 
 	customerRepository := repositories.NewCustomerRepository(database)
 	customerService := services.NewCustomerService(customerRepository)

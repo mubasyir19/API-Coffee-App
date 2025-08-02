@@ -62,6 +62,7 @@ func (c *Category) BeforeCreate(tx *gorm.DB) (err error) {
 type Product struct {
 	ID          string    `gorm:"type:char(36);primaryKey"`
 	Name        string    `gorm:"type:varchar(255);not null"`
+	Slug        string    `gorm:"type:varchar(255);uniqueIndex;not-null"`
 	CategoryID  string    `gorm:"type:char(36);not null"`
 	Description string    `gorm:"type:text;not null"`
 	Price       float64   `gorm:"type:decimal(10,2);not null"`
