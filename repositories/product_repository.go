@@ -11,6 +11,7 @@ type ProductRepository interface {
 	FindAll() ([]models.Product, error)
 	FindByID(id string) (*models.Product, error)
 	FindByName(name string) (*models.Product, error)
+	FindBySlug(slug string) (*models.Product, error)
 	FindByCategory(categoryID string) ([]models.Product, error)
 	Create(product *models.Product) (models.Product, error)
 	Update(product *models.Product) (*models.Product, error)
@@ -39,6 +40,12 @@ func (r *productRepository) FindByID(id string) (*models.Product, error) {
 func (r *productRepository) FindByName(name string) (*models.Product, error) {
 	var product models.Product
 	err := r.db.Where("LOWER(name) = ?", strings.ToLower(name)).First(&product).Error
+	return &product, err
+}
+
+func (r *productRepository) FindBySlug(slug string) (*models.Product, error) {
+	var product models.Product
+	err := r.db.Where("slug = ?", slug).First(&product).Error
 	return &product, err
 }
 

@@ -62,6 +62,26 @@ func (h *productHandler) GetProdutcByID(c *gin.Context) {
 	})
 }
 
+func (h *productHandler) GetProductBySlug(c *gin.Context) {
+	productSlug := c.Param("slug")
+
+	product, err := h.service.FindProductBySlug(productSlug)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, responses.APIResponse{
+			Code:    "BAD_REQUEST",
+			Message: "Failed get data products",
+			Data:    nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, responses.APIResponse{
+		Code:    "SUCCESS",
+		Message: "Successfully find product",
+		Data:    product,
+	})
+}
+
 func (h *productHandler) GetProductByName(c *gin.Context) {
 	productName := c.Param("name")
 

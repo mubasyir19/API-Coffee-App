@@ -5,7 +5,6 @@ import (
 	"api-coffee-app/handlers"
 	"api-coffee-app/middleware"
 	"api-coffee-app/repositories"
-	"api-coffee-app/seeders"
 	"api-coffee-app/services"
 	"net/http"
 
@@ -32,8 +31,8 @@ func main() {
 	db.ConnectDB()
 	database := db.DB
 
-	seeders.CategorySeeds()
-	seeders.ProductSeed()
+	// seeders.CategorySeeds()
+	// seeders.ProductSeed()
 
 	customerRepository := repositories.NewCustomerRepository(database)
 	customerService := services.NewCustomerService(customerRepository)
@@ -64,6 +63,7 @@ func main() {
 
 	api.GET("/products", productHandler.GetAllProducts)
 	api.GET("/product/id/:id", productHandler.GetProdutcByID)
+	api.GET("/product/slug/:slug", productHandler.GetProductBySlug)
 	api.GET("/product/name/:name", productHandler.GetProductByName)
 	api.GET("/product/category/:category_id", productHandler.GetProductsByCategory)
 	api.POST("/product/add", productHandler.AddProduct)

@@ -10,6 +10,7 @@ import (
 type ProductService interface {
 	FindAllProduct() ([]models.Product, error)
 	FindProductByID(id string) (*models.Product, error)
+	FindProductBySlug(slug string) (*models.Product, error)
 	FindProductByName(name string) (*models.Product, error)
 	FindProductByCategory(categoryID string) ([]models.Product, error)
 	AddProduct(productInput *requests.ProductInput) (*models.Product, error)
@@ -38,6 +39,10 @@ func (s *productService) FindProductByID(id string) (*models.Product, error) {
 
 func (s *productService) FindProductByName(name string) (*models.Product, error) {
 	return s.repository.FindByName(name)
+}
+
+func (s *productService) FindProductBySlug(slug string) (*models.Product, error) {
+	return s.repository.FindBySlug(slug)
 }
 
 func (s *productService) FindProductByCategory(categoryID string) ([]models.Product, error) {
