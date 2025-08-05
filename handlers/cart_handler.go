@@ -126,7 +126,8 @@ func (h *cartHandler) AddItemToCart(c *gin.Context) {
 
 func (h *cartHandler) UpdateItemCart(c *gin.Context) {
 	var input requests.CartInput
-	if err := c.ShouldBind(&input); err != nil {
+
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  400,
 			"message": "Data tidak lengkap",

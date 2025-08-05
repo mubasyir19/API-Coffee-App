@@ -5,10 +5,10 @@ import (
 	"api-coffee-app/repositories"
 	"api-coffee-app/requests"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type CartService interface {
@@ -92,23 +92,29 @@ func (s *cartService) UpdateItem(cartInput *requests.CartInput) (*models.Cart, e
 		return nil, errors.New("quantity must be more than zero")
 	}
 
-	product, err := s.productRepo.FindByID(cartInput.ProductID)
-	if err != nil {
+	// check customer
+	if _, err := s.customerRepo.FindByID(cartInput.CustomerID); err != nil {
+		fmt.Println("customer gk ketemu = ", err)
+		return nil, errors.New("customer not found")
+	}
+
+	// check product
+	if _, err := s.productRepo.FindByID(cartInput.ProductID); err != nil {
 		return nil, errors.New("product not found")
 	}
 
-	newTotalPrice := product.Price * float64(cartInput.Quantity)
-
+	// find chart base on input customerId dan productId
 	existingCart, err := s.repository.FindByUserAndProduct(cartInput.CustomerID, cartInput.ProductID)
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err // error beneran selain record not found
+	if err != nil {
+		return nil, err
 	}
 
 	existingCart.Quantity = cartInput.Quantity
-	existingCart.TotalPrice = newTotalPrice
+	existingCart.TotalPrice = float64(cartInput.Quantity) * existingCart.Product.Price
 
 	updatedCart, err := s.repository.Update(existingCart)
 	if err != nil {
+		fmt.Println("salah disini nih = ", err)
 		return nil, errors.New("failed to update cart")
 	}
 

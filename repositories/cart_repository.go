@@ -32,7 +32,6 @@ func (r *cartRepository) FindByUserID(customerID string) ([]models.Cart, error) 
 func (r *cartRepository) FindByUserAndProduct(CustomerID, ProductID string) (*models.Cart, error) {
 	var cart models.Cart
 	err := r.db.Preload("Customer").Preload("Product").Where("customer_id = ? AND product_id = ?", CustomerID, ProductID).First(&cart).Error
-	log.Println("terjadi error = ", err)
 	if err != nil {
 		return nil, err
 	}
@@ -49,8 +48,14 @@ func (r *cartRepository) Create(cart *models.Cart) (*models.Cart, error) {
 }
 
 func (r *cartRepository) Update(cart *models.Cart) (*models.Cart, error) {
-	err := r.db.Save(&cart).Error
+	// err := r.db.Save(cart).Error
+	err := r.db.Model(&models.Cart{}).Where("id = ?", cart.ID).
+		Updates(map[string]any{
+			"quantity":    cart.Quantity,
+			"total_price": cart.TotalPrice,
+		}).Error
 	if err != nil {
+		log.Println("errornya? = ", err)
 		return cart, err
 	}
 
