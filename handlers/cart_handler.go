@@ -87,6 +87,7 @@ func (h *cartHandler) GetCartItems(c *gin.Context) {
 		Code:    "SUCCESS",
 		Message: "Successfully get data cart",
 		Data: responses.CartSummaryResponse{
+			CartID:      cartItems[0].ID,
 			TotalAmount: totalAmount,
 			TotalItems:  totalItems,
 			Customer:    customerResp,
