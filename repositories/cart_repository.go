@@ -63,5 +63,16 @@ func (r *cartRepository) Update(cart *models.Cart) (*models.Cart, error) {
 }
 
 func (r *cartRepository) Remove(id string) error {
-	return r.db.Where("id = ?", id).Delete(&id).Error
+	err := r.db.Delete(&models.Cart{}, "id = ?", id).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+	// if err := r.db.Where("id = ?", id).Delete(&models.Cart{}).Error; err != nil {
+	// 	return err
+	// }
+
+	// return nil
 }

@@ -71,6 +71,7 @@ func main() {
 	api.GET("/cart", cartHandler.GetCartItems)
 	api.POST("/cart/add", cartHandler.AddItemToCart)
 	api.PUT("/cart/update", cartHandler.UpdateItemCart)
+	api.DELETE("/cart/delete/:id", cartHandler.RemoveItemCart)
 
 	app.Run(":8080")
 }
